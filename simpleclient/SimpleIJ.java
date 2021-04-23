@@ -13,15 +13,21 @@ public class SimpleIJ {
       try (Connection conn = d.connect(s, null);
            Statement stmt = conn.createStatement()) {
          System.out.print("\nSQL> ");
+         String cmd = "";
          while (sc.hasNextLine()) {
             // process one line of input
-            String cmd = sc.nextLine().trim();
+            cmd = cmd + sc.nextLine();
+            if (!cmd.contains(";")) continue;
+
+            cmd = cmd.trim();
             if (cmd.startsWith("exit"))
                break;
             else if (cmd.startsWith("select"))
                doQuery(stmt, cmd);
             else
                doUpdate(stmt, cmd);
+
+            cmd = "";
             System.out.print("\nSQL> ");
          }
       }
