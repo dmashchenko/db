@@ -2,6 +2,7 @@ package simpledb.jdbc.embedded;
 
 import java.sql.SQLException;
 import simpledb.server.SimpleDB;
+import simpledb.stats.StorageStatistics;
 import simpledb.tx.Transaction;
 import simpledb.plan.Planner;
 import simpledb.jdbc.ConnectionAdapter;
@@ -47,6 +48,8 @@ class EmbeddedConnection extends ConnectionAdapter {
    public void commit() throws SQLException {
       currentTx.commit();
       currentTx = db.newTx();
+      StorageStatistics stats = this.db.fileMgr().stats();
+      System.out.println("BlockNumber: " + stats.getBlockNumber());
    }
 
    /**
@@ -55,6 +58,8 @@ class EmbeddedConnection extends ConnectionAdapter {
    public void rollback() throws SQLException {
       currentTx.rollback();
       currentTx = db.newTx();
+      StorageStatistics stats = this.db.fileMgr().stats();
+      System.out.println("BlockNumber: " + stats.getBlockNumber());
    }
 
    /**

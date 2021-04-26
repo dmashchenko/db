@@ -5,6 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import simpledb.plan.Planner;
 import simpledb.server.SimpleDB;
+import simpledb.stats.StorageStatistics;
 import simpledb.tx.Transaction;
 
 /**
@@ -63,6 +64,8 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements RemoteConnecti
    void commit() {
       currentTx.commit();
       currentTx = db.newTx();
+      StorageStatistics stats = this.db.fileMgr().stats();
+      System.out.println("BlockNumber: " + stats.getBlockNumber());
    }
    
    /**
@@ -72,6 +75,8 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements RemoteConnecti
    void rollback() {
       currentTx.rollback();
       currentTx = db.newTx();
+      StorageStatistics stats = this.db.fileMgr().stats();
+      System.out.println("BlockNumber: " + stats.getBlockNumber());
    }
 }
 
